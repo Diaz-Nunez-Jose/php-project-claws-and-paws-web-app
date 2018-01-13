@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+</head>
+
+<body>
+	<div onmouseover="highlight(this)" onmouseout="unhighlight(this)">
+		<p>Hello, world!</p>
+	</div>
+	
+</body>
+
+<script>
+	function highlight(x) {
+	    x.style.backgroundColor = "yellow";
+	}
+
+	function unhighlight(x) {
+	    x.style.backgroundColor = "";
+	}
+</script>
+
+</html>
