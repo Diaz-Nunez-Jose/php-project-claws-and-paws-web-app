@@ -1,10 +1,143 @@
-*
-{
+* {
 	margin: 0;
 	padding: 0;
 }
 
-body 
-{
-	font-family: tahoma; 
+.row {
+	max-width: 1140px;
+	margin: auto;
+}
+
+body  {
+	font-family: Yu Gothic UI Light; 
+}
+
+.welcome {
+	position: absolute;
+	width: 1140px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+header {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../Images/home-background.jpg);
+	height: 100vh;
+	background-position: center;
+	background-size: cover;
+}
+
+h1 {
+	color: white;
+}
+
+.main-nav {
+	list-style: none;
+	margin-top: 60px;
+}
+
+.main-nav li {
+	display: inline-block;
+	margin-left: 30px
+}
+
+.main-nav li a {
+	color: white;
+	text-decoration: none;
+	font-size: 90%;
+	font-weight: bold;
+}
+
+.main-nav li a:hover {
+	color: #467dbe;
+	border-top: 1px solid #467dbe;
+	border-bottom: 1px solid #467dbe;
+	transition: all 0.5s ease-in;
+	padding: 8px 0;
+}
+
+.byui-logo img {
+	height: 100px;
+	float: left;
+	margin-top: 30px;
+}
+
+.byui-logo object {
+	height: 100px;
+	float: left;
+	margin-top: 30px;
+}
+
+.btn {
+	border: 1px solid #467dbe;
+	padding: 10px 30px;
+	color: #467dbe;
+	text-decoration: none;
+	border-radius: 12px;
+	margin-right: 13px;
+}
+
+.welcome-btns {
+	margin-top: 40px;
+}
+
+.btn-about {
+	background-color: #467dbe;
+	color: white;
+}
+
+.btn-about:hover {
+	color: black;
+	transition: all 0.5s ease-in;	
+}
+
+.btn-assignments:hover {
+	background-color: #467dbe;
+	color: white;
+	transition: all 0.5s ease-in;	
+}
+
+.about-description {
+	width: 70%;
+	margin-left: 15%;
+	margin-bottom: 20px;
+	text-align: justify;
+}
+
+h3:after {
+	width: 100px;
+	height: 2px;
+	background-color: #467dbe;
+	display: block;
+	content: " ";
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+.features h3 {
+	margin-top: 60px;
+	margin-bottom: 30px;
+}
+
+.about-text {
+	text-align: justify;
+}
+
+.features i {
+	font-size: 50px;
+	color: #467dbe;
+}
+
+.features h4 {
+	text-align: center;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-info {
+	margin-top: 20px;
 }
