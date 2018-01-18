@@ -57,7 +57,7 @@
 				ABOUT
 			</h3>
 			<p class="about-description">
-				My name is Jose Diaz-Nunez, and I am from the Chicagoland area (go Bears, Cubs, Bulls, and Blackhawks!). I am a senior this school year, majoring in C.S., and will be graduating after the Spring semester. I love reading, music, and movies. I am also a big fan of art and design, so learning about front-end web development prevously was a lot of fun. However, I am also very interested in back-end web development and all that it entails, so I am very much looking forward to learning a lot in this class this semester and applying this knowledge.
+				My name's Jose Diaz-Nunez, and I'm from the Chicagoland area. I'm a senior this school year, majoring in C.S., and will be graduating after the Spring semester. I love reading, music, and movies. I'm also a big fan of art and design, so learning about front-end web development prevously was a lot of fun. However, I am very interested in back-end web development and all that it entails, so I'm very much looking forward to learning a lot in this class this semester and applying this knowledge.
 			</p>
 		</div>
 
