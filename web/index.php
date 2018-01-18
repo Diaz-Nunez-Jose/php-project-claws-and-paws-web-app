@@ -28,7 +28,7 @@
 				<a href="#about">ABOUT</a>
 			</li>
 			<li>
-				<a href="assignments.html">ASSIGNMENTS</a>
+				<a href="assignments.php">ASSIGNMENTS</a>
 			</li>
 			<li>
 				<a href="#contact">CONTACT</a>
@@ -44,7 +44,7 @@
 				<a href="#about" class="btn btn-about">
 					Show me more
 				</a>
-				<a href="assignments.html" class="btn btn-assignments">
+				<a href="assignments.php" class="btn btn-assignments">
 					Assignments
 				</a>
 			</div>
