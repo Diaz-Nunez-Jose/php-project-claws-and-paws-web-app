@@ -116,7 +116,7 @@
 						echo htmlspecialchars($_SERVER["PHP_SELF"]);
 						echo 
 						"
-											' method='post' onclick='return event.shiftKey !== true;'' onkeypress='return !(event.keyCode === 13 && event.shiftKey);'>
+											' method='post' onclick='return event.shiftKey !== true;' onkeypress='return !(event.keyCode === 13 && event.shiftKey);'>
 												<input type='hidden' name='uniqid' value='
 						";
 						echo uniqid();
