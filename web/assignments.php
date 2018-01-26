@@ -38,11 +38,11 @@
 
 		<div class="welcome">
 			<h1>
-				Ponder and Prove Assignments:
+				Ponder and Prove.
 			</h1>
 			<div class="welcome-btns">
 				<a href="prove03/browse-items.php" class="btn btn-assignments">
-					Assignments
+					Week 3
 				</a>
 			</div>
 		</div>
