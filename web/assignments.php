@@ -24,7 +24,7 @@
 			<li>
 				<a href="index.php">HOME</a>
 			</li>
-			<li>
+			<li class="active">
 				<a href="#">ABOUT</a>
 			</li>
 			<li>

@@ -21,7 +21,7 @@
 		</div>
 
 		<ul class="main-nav">
-			<li>
+			<li class="active">
 				<a href="">HOME</a>
 			</li>
 			<li>
