@@ -110,7 +110,7 @@
 											<p style='font-size: 80%; text-align: justify'>$description</p>
 										</td>
 										<td align='middle'>
-											<iframe style='display:none' name='hidden-iframe' id='hidden-iframe'></iframe>
+											<iframe style='display:none' id='hidden-iframe'></iframe>
 											<form target='hidden-iframe' action='
 						";
 						echo htmlspecialchars($_SERVER["PHP_SELF"]);
