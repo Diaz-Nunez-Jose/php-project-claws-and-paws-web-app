@@ -111,7 +111,7 @@
 										</td>
 										<td align='middle'>
 											<iframe style='display:none' name='hidden-iframe'></iframe>
-											<form target='_parent' action='
+											<form target='_self' action='
 						";
 						echo htmlspecialchars($_SERVER["PHP_SELF"]);
 						echo 
