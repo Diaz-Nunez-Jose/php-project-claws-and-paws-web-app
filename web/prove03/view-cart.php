@@ -111,12 +111,12 @@
 										</td>
 										<td align='middle'>
 											<iframe style='display:none' name='hidden-iframe'></iframe>
-											<form target='hidden-frame' action='
+											<form target='_blank' action='
 						";
 						echo htmlspecialchars($_SERVER["PHP_SELF"]);
 						echo 
 						"
-											' method='post' onclick='return event.shiftKey !== true;' onkeypress='return !(event.keyCode === 13 && event.shiftKey);'>
+											' method='post' >
 												<input type='hidden' name='uniqid' value='
 						";
 						echo uniqid();
