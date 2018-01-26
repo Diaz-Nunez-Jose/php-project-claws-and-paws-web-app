@@ -22,10 +22,10 @@
 
 		<ul class="main-nav">
 			<li>
-				<a href="">HOME</a>
+				<a href="index.php">HOME</a>
 			</li>
 			<li>
-				<a href="#about">ABOUT</a>
+				<a href="#">ABOUT</a>
 			</li>
 			<li>
 				<a href="assignments.php">ASSIGNMENTS</a>
