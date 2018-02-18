@@ -1,6 +1,55 @@
 <?php 
+  session_start();
+  // session_destroy();
+
+  require "assets/scripts/get_db.php";
+  $db = get_Db();
+
   $title = 'Sign In'; 
-  $currentPage = 'sign-in.php'; 
+  $currentPage = 'sign-in.php';   
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST")
+  {
+    if(!empty($_POST["username"])  && !empty($_POST["password"]))
+    {
+      $username = $_POST["username"];
+      $password = $_POST["password"];
+      $stmt = $db->prepare("SELECT member_id, username, password, first_name FROM member WHERE username = '$username'");
+      $stmt->execute();
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      
+      // echo "This is a valid password and username";
+      $result = $result[0];
+      // echo "$result["username"] == " . $result["username"] . "and $result["password"] == " . $username && $result["password"];
+      if($result != NULL)
+      {
+        if ($result["username"] == $username && $result["password"] == $password) 
+        {
+          echo "Form input is valid - username and password linked and valid.<br>";
+          $_SESSION["loggedIn"] = $result['member_id'];           
+          $_SESSION["loggedInName"] = $result['first_name'];           
+          echo "_SESSION at logged in is " . $_SESSION["loggedIn"] . "END<br>";
+          header("Location: home.php");
+          exit;
+        }
+        else
+        {
+          echo "This password and username not in the DB";
+          $_SESSION["loggedIn"] = 0; 
+          header("Location: sign-in.php");
+          exit;
+        }
+      }
+      else
+      {
+          echo "This password and username not in the DB";
+          $_SESSION["loggedIn"] = 0; 
+          echo "loggedIn session var = " . $_SESSION["loggedIn"] . "<br>";
+          header("Location: sign-in.php");
+          exit;        
+      }
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -11,44 +60,42 @@
     ?>
 
     <!-- Custom styles for this template -->
-    <link href="assets/bootstrap-4.0.0/docs/4.0/examples/sign-in/signin.css" rel="stylesheet">
+    <link href="assets/bootstrap-3.3.7-dist/css/signin.css" rel="stylesheet">
   </head>
 
-  <body class="bg-light">
+  <body>
     <?php
       include('nav-bar.php');
     ?>
 
-    <main role="main">
-      <form class="form-signin">
-        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <div class="container">
 
+      <form class="form-signin" action="sign-in.php" method="post">
+      <img src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+      
+        <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputUsername" class="sr-only">Username</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" required autofocus>
 
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-
-        <div class="checkbox mb-3">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
+        <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
-        <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+        <p>&copy; 2017-2018</p>
 
-        <form>
-          <a href="sign-up.php">Not a member? Sign up now!</a>
-        </form>
+        <a href="sign-up.php">Not a member? Sign up now!</a>    
       </form>
-    </main>
+
+    </div> <!-- /container -->
 
     <?php
-      include('core-js.php');
+      include('footer-scripts.php');
     ?>
   </body>
 </html>

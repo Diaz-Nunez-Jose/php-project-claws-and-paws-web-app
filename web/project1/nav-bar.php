@@ -1,53 +1,109 @@
-<header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="home.php">Claws and Paws</a>
-    
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-default navbar-static-top" style="position: fixed; right: 0; left: 0; top: 0;">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div class="navbar-brand">Claws &amp; Paws</div>
+    </div>
 
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a 
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li 
           <?php 
             if($currentPage == "home.php")
-            {
-              echo "class='nav-link active'";
-            }
+              echo "class='active'> <a href='#'>"; 
             else
-            {
-              echo "class='nav-link'";
-            }
-          ?>
-          href="home.php">Home <span class="sr-only">(current)</span></a>
+              echo " > <a href='home.php'>"; 
+          ?>        
+            Home
+            <span class="sr-only">(current)
+            </span>
+          </a>
         </li>
-        <li class="nav-item">
-          <a 
+
+        <li 
           <?php 
-            if($currentPage == "browse-items-dog.php" || 
-               $currentPage == "browse-items-cat.php" || 
-               $currentPage == "browse-items-search.php")
-            {
-              echo "class='nav-link active'";
-            }
+            if($currentPage == "browse-items.php")
+              echo "class='active'> <a href='#'>";
             else
-            {
-              echo "class='nav-link'";
-            }
-          ?> href="browse-items-dog.php">Browse Items</a>
+              echo " > <a href='browse-items.php'>"; 
+          ?>        
+            Browse Items
+            <span class="sr-only">(current)
+            </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#contact">
+            Contact
+            <span class="sr-only">(current)
+            </span>
+          </a> 
         </li>
       </ul>
 
-      <form class="form-inline mt-2 mt-md-0" action="browse-items-search.php" method="post">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="search">
-        <button class="btn fas fa-search" type="submit"></button>
+      <form class="navbar-form navbar-right" action="browse-items.php" method="post">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
       </form>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="sign-in.php"><span class="btn fas fa-sign-in-alt"></span>Sign In</a></li>
-        <li><a href="view-cart.php"><span class="btn fas fa-shopping-cart"></span>Cart</a></li>
+        <?php
+          if(!isset($_SESSION["loggedIn"]) || (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == 0))
+          {
+            echo "<li><a href='sign-up.php'>Welcome, Guest</a></li>"; 
+            echo "<li><a href='sign-in.php'><span></span>Sign In</a></li>";
+          }
+          else
+          {
+            $idNav = $_SESSION['loggedIn'];
+            $stmtNav = $db->prepare("SELECT first_name FROM member WHERE member_id = $idNav");
+            $stmtNav->execute();
+            $resultNav = $stmtNav->fetchAll(PDO::FETCH_ASSOC)[0];
+
+            if($currentPage == "account.php")
+              echo "<li class='active'><a href='#'>Hello, " . $resultNav["first_name"] . "</a></li>";
+            else
+              echo "<li><a href='account.php'>Hello, " . $resultNav["first_name"] . "</a></li>";
+
+            echo "<li><a href='sign-off.php'><span></span>Sign Off</a></li>";
+          }
+        ?>
+
+        <li 
+          <?php 
+            if($currentPage == "view-cart.php")
+              echo "class='active'> <a href='#'>"; 
+            else
+              echo " > <a href='view-cart.php'>"; 
+          ?>        
+            Cart
+            <span class="sr-only">(current)
+            </span>
+          </a>
+        </li>
+
+<!--         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li> -->
+
       </ul>
-    </div>
-  </nav>
-</header>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

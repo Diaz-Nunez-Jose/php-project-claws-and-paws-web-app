@@ -1,236 +1,419 @@
 <?php 
+  session_start();
+
+  require "assets/scripts/get_db.php";
+
+  $db = get_Db();
+
   $title = 'Check Out'; 
   $currentPage = 'check-out.php'; 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <?php
       include('head.php');
     ?>
-
-    <!-- Custom styles for this template -->
-    <!-- <link href="assets/bootstrap-4.0.0-extra/form-validation.css" rel="stylesheet"> -->
   </head>
 
-  <body class="bg-light">
+  <body>
     <?php
       include('nav-bar.php');
     ?>
+    
+    <?php
+      if(empty($_SESSION["cart"]))
+      {
+        header("Location: view-cart.php");
+        exit;
+      }
+      else
+      {
+        if($_SESSION["loggedIn"] == 0)
+        {
+          if ($_SERVER["REQUEST_METHOD"] == "POST") 
+          {
+            if(! empty($_POST["guestCheckoutSubmit"]))
+            {
+              echo
+              "
+              <div class='containier'>
+                <form action='check-out-validation.php' method='post'>
+                  <div>
+                    <img src='https://getbootstrap.com/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72'>
+                    <h2>Check Out as Guest</h2>
+                  </div>
 
-    <div class="container">
-      <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h2>Checkout form</h2>
-        <p class="lead">Below is an example form built entirely with Bootstrap's form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
-      </div>
+                  <div>
+                    <div>
+                      <input type='text' placeholder='Promo code'>
+                      <div>
+                        <input type='text' name='promoCode'>Redeem</input>
+                      </div>
+                    </div>
 
-      <div class="row">
-        <div class="col-md-4 order-md-2 mb-4">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">Your cart</span>
-            <span class="badge badge-secondary badge-pill">3</span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <!-- Checkout information -->
+                    <div>
+                      <h4>Billing address</h4>
+                        <div>
+                          <div>
+                            <label for='firstName'>First name</label>
+                            <input type='text' id='firstName' placeholder='' value='' name='firstName' required>
+                            <div>
+                              Valid first name is required.
+                            </div>
+                          </div>
+                          <div>
+                            <label for='lastName'>Last name</label>
+                            <input type='text' placeholder='' value='' name='lastName' required>
+                            <div>
+                              Valid last name is required.
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label for='email'>Email <span>(Optional)</span></label>
+                          <input type='email' id='email' name='email' placeholder='you@example.com'>
+                          <div>
+                            Please enter a valid email address for shipping updates.
+                          </div>
+                        </div>
+
+                        <div>
+                          <label for='address'>Address</label>
+                          <input type='text' id='address' name='line1' placeholder='1234 Main St' required>
+                          <div>
+                            Please enter your shipping address.
+                          </div>
+                        </div>
+
+                        <div>
+                          <label for='address2'>Address 2 <span>(Optional)</span></label>
+                          <input type='text' id='address2' name='line2' placeholder='Apartment or suite'>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label for='country'>Country</label>
+                            <select id='country' required>
+                              <option value='' name='country'>Choose...</option>
+                              <option>United States</option>
+                            </select>
+                            <div>
+                              Please select a valid country.
+                            </div>
+                          </div>
+                          <div>
+                            <label for='state'>State</label>
+                            <select id='state' name='state' required>
+                              <option value=''>Choose...</option>
+                              <option>California</option>
+                            </select>
+                            <div>
+                              Please provide a valid state.
+                            </div>
+                          </div>
+                          <div>
+                            <label for='zip'>Zip</label>
+                            <input type='text' id='zip' name='zip' placeholder='' required>
+                            <div>
+                              Zip code required.
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                        <div custom-checkbox'>
+                          <input type='checkbox' name='shippingSameAsBilling' id='same-address'>
+                          <label for='same-address'>Shipping address is the same as my billing address</label>
+                        </div>
+
+                        <hr>
+
+                        <h4>Payment</h4>
+
+                        <div>
+                          <div>
+                            <input id='credit' name='paymentMethod' type='radio'  checked required>
+                            <label for='credit'>Credit card</label>
+                          </div>
+                          <div>
+                            <input id='debit' name='paymentMethod' type='radio' required>
+                            <label for='debit'>Debit card</label>
+                          </div>
+                          <div>
+                            <input id='paypal' name='paymentMethod' type='radio' required>
+                            <label for='paypal'>Paypal</label>
+                          </div>
+                        </div>
+                        <div>
+                          <div>
+                            <label for='cc-name'>Name on card</label>
+                            <input type='text' id='cc-name' placeholder='' name='cardName' required>
+                            <small>Full name as displayed on card</small>
+                            <div>
+                              Name on card is required
+                            </div>
+                          </div>
+                          <div>
+                            <label for='cc-number'>Credit card number</label>
+                            <input type='text' id='cc-number' name='cardNumber' placeholder='' required>
+                            <div>
+                              Credit card number is required
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div>
+                            <label for='cc-expiration'>Expiration</label>
+                            <input type='text' id='cc-expiration' name='cardExpiration' placeholder='' required>
+                            <div>
+                              Expiration date required
+                            </div>
+                          </div>
+                          <div>
+                            <label for='cc-expiration'>CVV</label>
+                            <input type='text' id='cc-cvv' name='cardCVV' placeholder='' required>
+                            <div>
+                              Security code required
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                        <input type='submit' value='Confirm order'>
+                        </hr>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              ";
+            }
+          }
+          else
+          {
+            echo 
+              "
+              <div class='container'>
+                <h3>You are not logged in.</h3>
+
+                <form action='check-out.php' method='post'>
+                  <input type='submit' name='guestCheckoutSubmit' value='Check out as guest'>
+                </form>
+
+                <h3>Already have an account?</h3>
+
+                <form action='sign-in.php' method='post'>
+                  <input type='submit' value='Log in'>
+                </form>
+
+                <h3>Don't have an account?</h3>
+
+                <form action='sign-up.php' method='post'>
+                  <input type='submit' value='Create account'>
+                </form>
+              </div>
+              ";              
+          }
+        }
+        else
+        {
+          $id = $_SESSION['loggedIn'];
+
+          $stmt = $db->prepare("SELECT first_name, middle_initial, last_name, email, username, password, purchases, address_id 
+                                FROM   member 
+                                WHERE  member_id = $id");
+          $stmt->execute();
+          $record = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+
+          $firstName     = $record["first_name"    ];   // /**/
+          $middleInitial = $record["middle_initial"];   /**/
+          $lastName      = $record["last_name"     ];   // /**/
+          $username      = $record["username"      ];   // /**/
+          $email         = $record["email"         ];   // /**/
+          $purchases     = $record["purchases"     ];   /**/
+          $addressId     = $record["address_id"    ];
+                                                        // password /**/
+          $line1 = NULL;
+          $line2 = NULL;
+          $city  = NULL;
+          $state = NULL;
+          $zip   = NULL;
+
+          if ($addressId != NULL) 
+          {
+            $stmtAddr = $db->prepare("SELECT line_1, line_2, city, state, zip
+                                      FROM   address 
+                                      WHERE  address_id = '$addressId'");
+            $stmtAddr->execute();
+            $address = $stmtAddr->fetchAll(PDO::FETCH_ASSOC)[0];
+
+            $line1 = $address["line_1"];
+            $line2 = $address["line_2"];
+            $city  = $address["city"  ];
+            $state = $address["state" ];
+            $zip   = $address["zip"   ];
+          }
+
+          echo
+          "
+          <div class='container'>
+            <form action='check-out-validation.php' method='post'>
               <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-muted">Brief description</small>
+                <img src='https://getbootstrap.com/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72'>
+                <h2>Check Out with Account</h2>
               </div>
-              <span class="text-muted">$12</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
+
               <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$8</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between bg-light">
-              <div class="text-success">
-                <h6 class="my-0">Promo code</h6>
-                <small>EXAMPLECODE</small>
-              </div>
-              <span class="text-success">-$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$20</strong>
-            </li>
-          </ul>
+                <div>
+                  <input type='text' placeholder='Promo code'>
+                  <div>
+                    <input type='text' name='promoCode'>Redeem</input>
+                  </div>
+                </div>
 
-          <form class="card p-2">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Promo code">
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Redeem</button>
-              </div>
-            </div>
-          </form>
-        </div>
+                <!-- Checkout information -->
+                <div>
+                  <h4>Billing address</h4>
+                    <div>
+                      <div>
+                        <label for='firstName'>First name</label>
+                        <input type='text' id='firstName' placeholder='' value='$firstName' name='firstName' required>
+                        <div>
+                          Valid first name is required.
+                        </div>
+                      </div>
+                      <div>
+                        <label for='lastName'>Last name</label>
+                        <input type='text' placeholder='' value='$lastName' name='lastName' required>
+                        <div>
+                          Valid last name is required.
+                        </div>
+                      </div>
+                    </div>
 
-        <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Billing address</h4>
-          <form class="needs-validation" novalidate>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid first name is required.
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid last name is required.
-                </div>
-              </div>
-            </div>
+                    <div>
+                      <label for='email'>Email <span>(Optional)</span></label>
+                      <input type='email' id='email' value='$email' name='email' placeholder='you@example.com'>
+                      <div>
+                        Please enter a valid email address for shipping updates.
+                      </div>
+                    </div>
 
-            <div class="mb-3">
-              <label for="username">Username</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">@</span>
-                </div>
-                <input type="text" class="form-control" id="username" placeholder="Username" required>
-                <div class="invalid-feedback" style="width: 100%;">
-                  Your username is required.
-                </div>
-              </div>
-            </div>
+                    <div>
+                      <label for='address'>Address</label>
+                      <input type='text' id='address' value='$line1' name='line1' placeholder='1234 Main St' required>
+                      <div>
+                        Please enter your shipping address.
+                      </div>
+                    </div>
 
-            <div class="mb-3">
-              <label for="email">Email <span class="text-muted">(Optional)</span></label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
-              </div>
-            </div>
+                    <div>
+                      <label for='address2'>Address 2 <span>(Optional)</span></label>
+                      <input type='text' id='address2' name='line2' value='$line2' placeholder='Apartment or suite'>
+                    </div>
 
-            <div class="mb-3">
-              <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-              <div class="invalid-feedback">
-                Please enter your shipping address.
-              </div>
-            </div>
+                    <div>
+                      <div>
+                        <label for='country'>Country</label>
+                        <select id='country' required>
+                          <option value='' name='country'>Choose...</option>
+                          <option>United States</option>
+                        </select>
+                        <div>
+                          Please select a valid country.
+                        </div>
+                      </div>
+                      <div>
+                        <label for='state'>State</label>
+                        <select id='state' name='state' required>
+                          <option value=''>$state</option>
+                          <option>California</option>
+                        </select>
+                        <div>
+                          Please provide a valid state.
+                        </div>
+                      </div>
+                      <div>
+                        <label for='zip'>Zip</label>
+                        <input type='text' id='zip' value='$zip' name='zip' placeholder='' required>
+                        <div>
+                          Zip code required.
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div custom-checkbox'>
+                      <input type='checkbox' name='shippingSameAsBilling' id='same-address'>
+                      <label for='same-address'>Shipping address is the same as my billing address</label>
+                    </div>
 
-            <div class="mb-3">
-              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-            </div>
+                    <hr>
 
-            <div class="row">
-              <div class="col-md-5 mb-3">
-                <label for="country">Country</label>
-                <select class="custom-select d-block w-100" id="country" required>
-                  <option value="">Choose...</option>
-                  <option>United States</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid country.
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="state">State</label>
-                <select class="custom-select d-block w-100" id="state" required>
-                  <option value="">Choose...</option>
-                  <option>California</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please provide a valid state.
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" placeholder="" required>
-                <div class="invalid-feedback">
-                  Zip code required.
-                </div>
-              </div>
-            </div>
-            <hr class="mb-4">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="same-address">
-              <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="save-info">
-              <label class="custom-control-label" for="save-info">Save this information for next time</label>
-            </div>
-            <hr class="mb-4">
+                    <h4>Payment</h4>
 
-            <h4 class="mb-3">Payment</h4>
-
-            <div class="d-block my-3">
-              <div class="custom-control custom-radio">
-                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
-                <label class="custom-control-label" for="credit">Credit card</label>
+                    <div>
+                      <div>
+                        <input id='credit' name='paymentMethod' type='radio'  checked required>
+                        <label for='credit'>Credit card</label>
+                      </div>
+                      <div>
+                        <input id='debit' name='paymentMethod' type='radio' required>
+                        <label for='debit'>Debit card</label>
+                      </div>
+                      <div>
+                        <input id='paypal' name='paymentMethod' type='radio' required>
+                        <label for='paypal'>Paypal</label>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <label for='cc-name'>Name on card</label>
+                        <input type='text' id='cc-name' placeholder='' name='cardName' required>
+                        <small>Full name as displayed on card</small>
+                        <div>
+                          Name on card is required
+                        </div>
+                      </div>
+                      <div>
+                        <label for='cc-number'>Credit card number</label>
+                        <input type='text' id='cc-number' name='cardNumber' placeholder='' required>
+                        <div>
+                          Credit card number is required
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <label for='cc-expiration'>Expiration</label>
+                        <input type='text' id='cc-expiration' name='cardExpiration' placeholder='' required>
+                        <div>
+                          Expiration date required
+                        </div>
+                      </div>
+                      <div>
+                        <label for='cc-expiration'>CVV</label>
+                        <input type='text' id='cc-cvv' name='cardCVV' placeholder='' required>
+                        <div>
+                          Security code required
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <input type='submit' value='Confirm order'>
+                    </hr>
+                </div>
               </div>
-              <div class="custom-control custom-radio">
-                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
-                <label class="custom-control-label" for="debit">Debit card</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                <label class="custom-control-label" for="paypal">Paypal</label>
-              </div>
+            </form>
             </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" placeholder="" required>
-                <small class="text-muted">Full name as displayed on card</small>
-                <div class="invalid-feedback">
-                  Name on card is required
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" placeholder="" required>
-                <div class="invalid-feedback">
-                  Credit card number is required
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-3 mb-3">
-                <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-                <div class="invalid-feedback">
-                  Expiration date required
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="cc-expiration">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-                <div class="invalid-feedback">
-                  Security code required
-                </div>
-              </div>
-            </div>
-            <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
+          ";
+        }
+      }
+    ?>
+    
     <?php
       include('footer.php');
-      include('core-js.php');
+      include('footer-scripts.php');
     ?>
   </body>
 </html>
