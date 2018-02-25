@@ -13,5 +13,5 @@ function cartToast()
 		function()
 		{ 
 			x.className = x.className.replace("show", ""); 
-		}, 1000);
+		}, 1200);
 } 

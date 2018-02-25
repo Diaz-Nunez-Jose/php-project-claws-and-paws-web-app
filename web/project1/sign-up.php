@@ -1,6 +1,5 @@
 <?php 
   session_start();
-  // session_destroy();
 
   require "assets/scripts/get_db.php";
   $db = get_Db();
@@ -13,21 +12,45 @@
     if(!empty($_POST["firstName"]) && !empty($_POST["lastName"]) && !empty($_POST["email"]) && 
        !empty($_POST["username"])  && !empty($_POST["password"]) && !empty($_POST["passwordConfirm"]))
     {
-      $username = $_POST["username"];
-      $email = $_POST["email"];
-      $password = $_POST["password"];
-      $passwordConfirm = $_POST["passwordConfirm"];
-      $stmtUsername = $db->prepare("SELECT username FROM member WHERE username = '$username'");
-      $stmtUsername->execute();
-      $stmtEmail = $db->prepare("SELECT email FROM member WHERE email = '$email'");
-      $stmtEmail->execute();
-      if(empty($stmtUsername->fetchAll(PDO::FETCH_ASSOC)) && empty($stmtEmail->fetchAll(PDO::FETCH_ASSOC)) && $passwordConfirm == $password)
-      {
-        // echo "This is a unique email and username";
-        $firstName = $_POST["firstName"];
-        $lastName = $_POST["lastName"];
+      $username        = htmlspecialchars($_POST["username"]);
+      $email           = htmlspecialchars($_POST["email"]);
+      $password        = htmlspecialchars($_POST["password"]);
+      $passwordConfirm = htmlspecialchars($_POST["passwordConfirm"]);
 
-        $stmtNewUser = $db->prepare("INSERT INTO member (first_name, last_name, email, username, password) VALUES (:first_name, :last_name, :email, :username, :password)");
+      $stmtUsername = $db->prepare("SELECT username 
+                                    FROM member 
+                                    WHERE username = '$username'");
+      $stmtUsername->execute();
+
+      $stmtEmail = $db->prepare("SELECT email 
+                                 FROM member 
+                                 WHERE email = '$email'");
+      $stmtEmail->execute();
+
+      if(empty($stmtUsername->fetchAll(PDO::FETCH_ASSOC)) && 
+         empty($stmtEmail->fetchAll(PDO::FETCH_ASSOC)) && 
+         $passwordConfirm == $password)
+      {
+        $firstName = htmlspecialchars($_POST["firstName"]);
+        $lastName  = htmlspecialchars($_POST["lastName"]);
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmtNewUser = $db->prepare("INSERT INTO member 
+                                     (
+                                         first_name, 
+                                         last_name, 
+                                         email, 
+                                         username, 
+                                         password
+                                      ) 
+                                      VALUES 
+                                      (
+                                         :first_name, 
+                                         :last_name, 
+                                         :email, 
+                                         :username, 
+                                         :password
+                                      )");
         $stmtNewUser->execute
         (
           array
@@ -36,28 +59,23 @@
           ':last_name'  => $lastName,
           ':email'      => $email,
           ':username'   => $username,
-          ':password'   => $password
+          ':password'   => $passwordHash
           )
         );
+
         $stmtNewUsername = $db->prepare("SELECT username FROM member WHERE username = '$username'");
         $stmtNewUsername->execute();
-        echo "A new user was added: " . $stmtNewUsername->fetchAll(PDO::FETCH_ASSOC) . "<br>";
-        // $stmtUsername = $db->prepare("SELECT username FROM member WHERE username = '$username'");
-        // $stmtUsername->execute();
 
         $last_id = $db->lastInsertId();
-        echo "The id is " . $last_id;
         $_SESSION["loggedIn"] = $last_id; 
-        echo "_SESSION at logged in is " . $_SESSION["loggedIn"] . "<br>";
         header("Location: home.php");
-        exit;
+        die();
       }
       else
       {
-        echo "This email and username already exist in the DB";
         $_SESSION["loggedIn"] = 0; 
         header("Location: sign-up.php");
-        exit;
+        die();
       }
     }
   }
@@ -66,21 +84,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <?php
-      include('head.php');
-    ?>
-    <link href="assets/bootstrap-3.3.7-dist/css/signin.css" rel="stylesheet">
+    <?php require('head.php'); ?>
+
+    <!-- Stylesheet for this page -->
+    <link href="assets/css/signin.css" rel="stylesheet">
   </head>
 
   <body>
-    <?php
-      include('nav-bar.php');
-    ?>
+    <?php require('nav-bar.php'); ?>
 
-    <div class="container">
-      <form class="form-signin"  action="sign-up.php" method="post">
-        <img src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1>Please enter the following information to sign up!</h1>
+    <div class="container-fluid" style="margin-top: 5%">
+      <form class="form-signin align-items-center"  action="sign-up.php" method="post">
+        <h1>Enter the following to sign up now!</h1>
 
         <label for="inputFirstName" class="sr-only">First name</label>
         <input type="text" id="inputFirstName"  class="form-control" placeholder="First name" name="firstName" required autofocus>
@@ -99,17 +114,13 @@
         
         <label for="inputPasswordConfirm" class="sr-only">Confirm password</label>
         <input type="password" id="inputPasswordConfirm"  class="form-control" placeholder="Confirm password" name="passwordConfirm" required>
-       
-        <button type="submit">Sign up</button>
 
-        <p>&copy; 2017-2018</p>
-
-        <a href="sign-in.php">Already a member? Sign in now!</a>
+        <div style="text-align:center;">
+          <button class="btn btn-primary" type="submit">Sign up</button> <br><br>
+          <a href="sign-in.php">Already a member? Sign in now!</a>  <br>
+          <p style="text-align:center;">&copy; 2017-2018</p>
+        </div>
       </form>
     </div>
-    
-    <?php
-      include('footer-scripts.php');
-    ?>
   </body>
 </html>

@@ -5,35 +5,36 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-    <?php
-      include('head.php');
-    ?>
+    <?php require('head.php'); ?>
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/half-slider.css" rel="stylesheet">
   </head>
 
   <body>
-    <?php
-      include('nav-bar.php');
-    ?>
+    <?php require('nav-bar.php'); ?>
 
-    <!-- Header - set the background image for the header in the line below -->
-    <header style="background-image: url('https://s.abcnews.com/images/US/cute-dogs-gty-01-jpo-171116_12x5_992.jpg');">
-      <img src="http://placehold.it/200x200&text=Logo" alt="">
+    <header>
+      <div id="carouselExampleIndicators" class="carousel slide" >
+        <div class="carousel-inner" >
+          <div class="carousel-item active" style="background-image: url('assets/img/confirmation-dogs.jpg')">
+            <div class="carousel-caption d-none d-md-block">
+              <h1>Thank you for your purchase!</h1>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <!-- Content section -->
-    <section>
-      <div>
-        <h1>Section Heading</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, suscipit, rerum quos facilis repellat architecto commodi officia atque nemo facere eum non illo voluptatem quae delectus odit vel itaque amet.</p>
+    <!-- Page Content -->
+    <section class="py-5">
+      <div class="container">
+        <h1>You should receive a confirmation email shortly</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
       </div>
     </section>
 
-    <?php
-      include('footer.php');
-      include('footer-scripts.php');
-    ?>
+    <?php require('footer.php'); ?>    
   </body>
 </html>

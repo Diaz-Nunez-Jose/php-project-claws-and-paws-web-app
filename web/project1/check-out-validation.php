@@ -1,9 +1,7 @@
 <?php 
   session_start();
-  // session_destroy();
 
   require "assets/scripts/get_db.php";
-
   $db = get_Db();
 
 	$title = 'Check-out Validation';
@@ -29,103 +27,58 @@
 
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
-		// echo (empty($_POST["promoCode"]) ? "no promo" : "yes promo");
-		if(! empty($_POST["promoCode"]))
-		{
-			$promoCode = $_POST["promoCode"];
-		}
-		if(! empty($_POST["firstName"]))
-		{
-			$firstName = $_POST["firstName"];
-		}
-		if(! empty($_POST["lastName"]))
-		{
-			$lastName = $_POST["lastName"];
-		}
-		if(! empty($_POST["email"]))
-		{
-			$email = $_POST["email"];
-		}
 		if(! empty($_POST["line1"]))
 		{
-			$line1 = $_POST["line1"];
+			$line1 = htmlspecialchars($_POST["line1"]);
 		}
 		if(! empty($_POST["line2"]))
 		{
-			$line2 = $_POST["line2"];
-		}
-		if(! empty($_POST["country"]))
-		{
-			$country = $_POST["country"];
+			$line2 = htmlspecialchars($_POST["line2"]);
 		}
 		if(! empty($_POST["state"]))
 		{
-			$state = $_POST["state"];
+			$state = htmlspecialchars($_POST["state"]);
 		}
 		if(! empty($_POST["zip"]))
 		{
-			$zip = $_POST["zip"];
+			$zip = htmlspecialchars($_POST["zip"]);
 		}
 		if(! empty($_POST["shippingSameAsBilling"]))
 		{
-			$shippingSameAsBilling = $_POST["shippingSameAsBilling"];
-		}
-		if(! empty($_POST["paymentMethod"]))
-		{
-			$paymentMethod = $_POST["paymentMethod"];
-		}
-		if(! empty($_POST["paymentMethod"]))
-		{
-			$paymentMethod = $_POST["paymentMethod"];
-		}
-		if(! empty($_POST["paymentMethod"]))
-		{
-			$paymentMethod = $_POST["paymentMethod"];
+			$shippingSameAsBilling = htmlspecialchars($_POST["shippingSameAsBilling"]);
 		}
 		if(! empty($_POST["cardName"]))
 		{
-			$cardName = $_POST["cardName"];
+			$cardName = htmlspecialchars($_POST["cardName"]);
 		}
 		if(! empty($_POST["cardNumber"]))
 		{
-			$cardNumber = $_POST["cardNumber"];
+			$cardNumber = htmlspecialchars($_POST["cardNumber"]);
 		}
 		if(! empty($_POST["cardExpiration"]))
 		{
-			$cardExpiration = $_POST["cardExpiration"];
+			$cardExpiration = htmlspecialchars($_POST["cardExpiration"]);
 		}
 		if(! empty($_POST["cardCVV"]))
 		{
-			$cardCVV = $_POST["cardCVV"];
+			$cardCVV = htmlspecialchars($_POST["cardCVV"]);
 		}
 	}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 	<head>
-		<?php
-			include('head.php');
-		?>
+		<?php require('head.php'); ?>
 	</head>
 
   <body>
-		<?php
-			include('nav-bar.php');
-		?>
-    
-    <h3>Thank you for your purchase!</h3>
-    <p>A confirmation message has been sent to <?php echo $email; ?>.</p>
-    <?php
-    	unset($_SESSION["cart"]);
-    	header("Location: home.php");
-    	exit;
-    ?>
+		<?php 
+			require('nav-bar.php');
 
-		<?php
-			include('footer.php');
-      include('footer-scripts.php');
-		?>    
+    	unset($_SESSION["cart"]);
+    	header("Location: order-confirmation.php");
+    	die();
+    ?>
 	</body>
 </html>

@@ -2,7 +2,6 @@
   session_start();
 
   require "assets/scripts/get_db.php";
-
   $db = get_Db();
 
   $title = 'Check Out'; 
@@ -12,21 +11,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <?php
-      include('head.php');
-    ?>
+    <?php require('head.php'); ?>
   </head>
 
-  <body>
-    <?php
-      include('nav-bar.php');
-    ?>
+  <body style="padding-top: 5%">
+    <?php require('nav-bar.php'); ?>
     
     <?php
       if(empty($_SESSION["cart"]))
       {
         header("Location: view-cart.php");
-        exit;
+        die();
       }
       else
       {
@@ -38,154 +33,97 @@
             {
               echo
               "
-              <div class='containier'>
-                <form action='check-out-validation.php' method='post'>
-                  <div>
-                    <img src='https://getbootstrap.com/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72'>
-                    <h2>Check Out as Guest</h2>
-                  </div>
-
-                  <div>
-                    <div>
-                      <input type='text' placeholder='Promo code'>
-                      <div>
-                        <input type='text' name='promoCode'>Redeem</input>
-                      </div>
+                <div class='container'>
+                  <form action='check-out-validation.php' method='post'>
+                    <h3>Billing address</h3>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='line1' placeholder='Line 1' required>
                     </div>
-
-                    <!-- Checkout information -->
-                    <div>
-                      <h4>Billing address</h4>
-                        <div>
-                          <div>
-                            <label for='firstName'>First name</label>
-                            <input type='text' id='firstName' placeholder='' value='' name='firstName' required>
-                            <div>
-                              Valid first name is required.
-                            </div>
-                          </div>
-                          <div>
-                            <label for='lastName'>Last name</label>
-                            <input type='text' placeholder='' value='' name='lastName' required>
-                            <div>
-                              Valid last name is required.
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <label for='email'>Email <span>(Optional)</span></label>
-                          <input type='email' id='email' name='email' placeholder='you@example.com'>
-                          <div>
-                            Please enter a valid email address for shipping updates.
-                          </div>
-                        </div>
-
-                        <div>
-                          <label for='address'>Address</label>
-                          <input type='text' id='address' name='line1' placeholder='1234 Main St' required>
-                          <div>
-                            Please enter your shipping address.
-                          </div>
-                        </div>
-
-                        <div>
-                          <label for='address2'>Address 2 <span>(Optional)</span></label>
-                          <input type='text' id='address2' name='line2' placeholder='Apartment or suite'>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label for='country'>Country</label>
-                            <select id='country' required>
-                              <option value='' name='country'>Choose...</option>
-                              <option>United States</option>
-                            </select>
-                            <div>
-                              Please select a valid country.
-                            </div>
-                          </div>
-                          <div>
-                            <label for='state'>State</label>
-                            <select id='state' name='state' required>
-                              <option value=''>Choose...</option>
-                              <option>California</option>
-                            </select>
-                            <div>
-                              Please provide a valid state.
-                            </div>
-                          </div>
-                          <div>
-                            <label for='zip'>Zip</label>
-                            <input type='text' id='zip' name='zip' placeholder='' required>
-                            <div>
-                              Zip code required.
-                            </div>
-                          </div>
-                        </div>
-                        <hr>
-                        <div custom-checkbox'>
-                          <input type='checkbox' name='shippingSameAsBilling' id='same-address'>
-                          <label for='same-address'>Shipping address is the same as my billing address</label>
-                        </div>
-
-                        <hr>
-
-                        <h4>Payment</h4>
-
-                        <div>
-                          <div>
-                            <input id='credit' name='paymentMethod' type='radio'  checked required>
-                            <label for='credit'>Credit card</label>
-                          </div>
-                          <div>
-                            <input id='debit' name='paymentMethod' type='radio' required>
-                            <label for='debit'>Debit card</label>
-                          </div>
-                          <div>
-                            <input id='paypal' name='paymentMethod' type='radio' required>
-                            <label for='paypal'>Paypal</label>
-                          </div>
-                        </div>
-                        <div>
-                          <div>
-                            <label for='cc-name'>Name on card</label>
-                            <input type='text' id='cc-name' placeholder='' name='cardName' required>
-                            <small>Full name as displayed on card</small>
-                            <div>
-                              Name on card is required
-                            </div>
-                          </div>
-                          <div>
-                            <label for='cc-number'>Credit card number</label>
-                            <input type='text' id='cc-number' name='cardNumber' placeholder='' required>
-                            <div>
-                              Credit card number is required
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <div>
-                            <label for='cc-expiration'>Expiration</label>
-                            <input type='text' id='cc-expiration' name='cardExpiration' placeholder='' required>
-                            <div>
-                              Expiration date required
-                            </div>
-                          </div>
-                          <div>
-                            <label for='cc-expiration'>CVV</label>
-                            <input type='text' id='cc-cvv' name='cardCVV' placeholder='' required>
-                            <div>
-                              Security code required
-                            </div>
-                          </div>
-                        </div>
-                        <hr>
-                        <input type='submit' value='Confirm order'>
-                        </hr>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='line2' placeholder='Line 2 (Optional)' optional>
                     </div>
-                  </div>
-                </form>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='city' placeholder='City' required>
+                    </div>
+                    <div class='form-group'>
+                      <select class='form-control' name='state' required>
+                        <option value=''>State</option>
+                        <option>Alabama </option>
+                        <option>Alaska </option>
+                        <option>Arizona </option>
+                        <option>Arkansas </option>
+                        <option>California </option>
+                        <option>Colorado </option>
+                        <option>Connecticut </option>
+                        <option>Delaware </option>
+                        <option>Florida </option>
+                        <option>Georgia </option>
+                        <option>Hawaii </option>
+                        <option>Idaho </option>
+                        <option>Illinois </option>
+                        <option>Indiana </option>
+                        <option>Iowa </option>
+                        <option>Kansas </option>
+                        <option>Kentucky </option>
+                        <option>Louisiana </option>
+                        <option>Maine </option>
+                        <option>Maryland </option>
+                        <option>Massachusetts </option>
+                        <option>Michigan </option>
+                        <option>Minnesota </option>
+                        <option>Mississippi </option>
+                        <option>Missouri </option>
+                        <option>Montana Nebraska </option>
+                        <option>Nevada </option>
+                        <option>New Hampshire </option>
+                        <option>New Jersey </option>
+                        <option>New Mexico </option>
+                        <option>New York </option>
+                        <option>North Carolina </option>
+                        <option>North Dakota </option>
+                        <option>Ohio </option>
+                        <option>Oklahoma </option>
+                        <option>Oregon </option>
+                        <option>Pennsylvania </option>
+                        <option>Rhode Island </option>
+                        <option>South Carolina </option>
+                        <option>South Dakota </option>
+                        <option>Tennessee </option>
+                        <option>Texas </option>
+                        <option>Utah </option>
+                        <option>Vermont </option>
+                        <option>Virginia </option>
+                        <option>Washington </option>
+                        <option>West Virginia </option>
+                        <option>Wisconsin </option>
+                        <option>Wyoming</option>
+                      </select>
+                    </div>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='zip' placeholder='Zip code' required>
+                    </div>
+                    <div class='form-check'>
+                      <input type='checkbox' class='form-check-input' name='sameShipping'>
+                      <label class='form-check-label' for='exampleCheck1'>Shipping address is same as billing</label>
+                    </div>
+                    <br><br>
+
+                    <h3>Payment information</h3>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='cardName' placeholder='Name on card' required>
+                    </div>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='cardNumber' placeholder='Card number' required>
+                    </div>
+                    <div class='form-group'>
+                      <input type='date' class='form-control' name='cardExpiration' placeholder='Expiration date' required>
+                    </div>
+                    <div class='form-group'>
+                      <input type='text' class='form-control' name='cardCVV' placeholder='CVV' required>
+                    </div>
+                    <br>
+                    <button type='submit' class='btn btn-success '>Complete purchase!</button>
+                  </form>
                 </div>
               ";
             }
@@ -193,27 +131,30 @@
           else
           {
             echo 
-              "
+            "
               <div class='container'>
-                <h3>You are not logged in.</h3>
-
+                <br> 
+                <h2>You are not logged in.</h2>
+                <br><br>
+                <h3>Purchases may be completed as a guest</h3> 
                 <form action='check-out.php' method='post'>
-                  <input type='submit' name='guestCheckoutSubmit' value='Check out as guest'>
-                </form>
-
-                <h3>Already have an account?</h3>
-
-                <form action='sign-in.php' method='post'>
-                  <input type='submit' value='Log in'>
-                </form>
-
+                  <input class='btn btn-outline-info' type='submit' name='guestCheckoutSubmit' value='Check out as guest'>
+                </form> 
+                <br><br>
                 <h3>Don't have an account?</h3>
-
+                  <p>Creating an account is as easy as ever!</p>
                 <form action='sign-up.php' method='post'>
-                  <input type='submit' value='Create account'>
+                  <input class='btn btn-outline-info' type='submit' value='Sign up now!'>
                 </form>
+                <br><br>
+                <h3>Already have an account?</h3> 
+                <form action='sign-in.php' method='post'>
+                  <p>Certain promos and rewards are available only to members!</p>
+                  <input class='btn btn-outline-info' type='submit' value='Sign in now!'>
+                </form>
+                <br><br>
               </div>
-              ";              
+            ";              
           }
         }
         else
@@ -226,14 +167,14 @@
           $stmt->execute();
           $record = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
 
-          $firstName     = $record["first_name"    ];   // /**/
-          $middleInitial = $record["middle_initial"];   /**/
-          $lastName      = $record["last_name"     ];   // /**/
-          $username      = $record["username"      ];   // /**/
-          $email         = $record["email"         ];   // /**/
-          $purchases     = $record["purchases"     ];   /**/
+          $firstName     = $record["first_name"    ];  
+          $middleInitial = $record["middle_initial"];  
+          $lastName      = $record["last_name"     ];  
+          $username      = $record["username"      ];  
+          $email         = $record["email"         ];  
+          $purchases     = $record["purchases"     ];  
           $addressId     = $record["address_id"    ];
-                                                        // password /**/
+                                                       
           $line1 = NULL;
           $line2 = NULL;
           $city  = NULL;
@@ -255,165 +196,105 @@
             $zip   = $address["zip"   ];
           }
 
-          echo
-          "
-          <div class='container'>
-            <form action='check-out-validation.php' method='post'>
-              <div>
-                <img src='https://getbootstrap.com/assets/brand/bootstrap-solid.svg' alt='' width='72' height='72'>
-                <h2>Check Out with Account</h2>
-              </div>
-
-              <div>
-                <div>
-                  <input type='text' placeholder='Promo code'>
-                  <div>
-                    <input type='text' name='promoCode'>Redeem</input>
-                  </div>
+          echo 
+          "          
+            <div class='container'>
+              <form action='check-out-validation.php' method='post'>
+                <h3>Billing address</h3>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='line1' placeholder='Line 1' value='$line1' required>
                 </div>
-
-                <!-- Checkout information -->
-                <div>
-                  <h4>Billing address</h4>
-                    <div>
-                      <div>
-                        <label for='firstName'>First name</label>
-                        <input type='text' id='firstName' placeholder='' value='$firstName' name='firstName' required>
-                        <div>
-                          Valid first name is required.
-                        </div>
-                      </div>
-                      <div>
-                        <label for='lastName'>Last name</label>
-                        <input type='text' placeholder='' value='$lastName' name='lastName' required>
-                        <div>
-                          Valid last name is required.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label for='email'>Email <span>(Optional)</span></label>
-                      <input type='email' id='email' value='$email' name='email' placeholder='you@example.com'>
-                      <div>
-                        Please enter a valid email address for shipping updates.
-                      </div>
-                    </div>
-
-                    <div>
-                      <label for='address'>Address</label>
-                      <input type='text' id='address' value='$line1' name='line1' placeholder='1234 Main St' required>
-                      <div>
-                        Please enter your shipping address.
-                      </div>
-                    </div>
-
-                    <div>
-                      <label for='address2'>Address 2 <span>(Optional)</span></label>
-                      <input type='text' id='address2' name='line2' value='$line2' placeholder='Apartment or suite'>
-                    </div>
-
-                    <div>
-                      <div>
-                        <label for='country'>Country</label>
-                        <select id='country' required>
-                          <option value='' name='country'>Choose...</option>
-                          <option>United States</option>
-                        </select>
-                        <div>
-                          Please select a valid country.
-                        </div>
-                      </div>
-                      <div>
-                        <label for='state'>State</label>
-                        <select id='state' name='state' required>
-                          <option value=''>$state</option>
-                          <option>California</option>
-                        </select>
-                        <div>
-                          Please provide a valid state.
-                        </div>
-                      </div>
-                      <div>
-                        <label for='zip'>Zip</label>
-                        <input type='text' id='zip' value='$zip' name='zip' placeholder='' required>
-                        <div>
-                          Zip code required.
-                        </div>
-                      </div>
-                    </div>
-                    <hr>
-                    <div custom-checkbox'>
-                      <input type='checkbox' name='shippingSameAsBilling' id='same-address'>
-                      <label for='same-address'>Shipping address is the same as my billing address</label>
-                    </div>
-
-                    <hr>
-
-                    <h4>Payment</h4>
-
-                    <div>
-                      <div>
-                        <input id='credit' name='paymentMethod' type='radio'  checked required>
-                        <label for='credit'>Credit card</label>
-                      </div>
-                      <div>
-                        <input id='debit' name='paymentMethod' type='radio' required>
-                        <label for='debit'>Debit card</label>
-                      </div>
-                      <div>
-                        <input id='paypal' name='paymentMethod' type='radio' required>
-                        <label for='paypal'>Paypal</label>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <label for='cc-name'>Name on card</label>
-                        <input type='text' id='cc-name' placeholder='' name='cardName' required>
-                        <small>Full name as displayed on card</small>
-                        <div>
-                          Name on card is required
-                        </div>
-                      </div>
-                      <div>
-                        <label for='cc-number'>Credit card number</label>
-                        <input type='text' id='cc-number' name='cardNumber' placeholder='' required>
-                        <div>
-                          Credit card number is required
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <label for='cc-expiration'>Expiration</label>
-                        <input type='text' id='cc-expiration' name='cardExpiration' placeholder='' required>
-                        <div>
-                          Expiration date required
-                        </div>
-                      </div>
-                      <div>
-                        <label for='cc-expiration'>CVV</label>
-                        <input type='text' id='cc-cvv' name='cardCVV' placeholder='' required>
-                        <div>
-                          Security code required
-                        </div>
-                      </div>
-                    </div>
-                    <hr>
-                    <input type='submit' value='Confirm order'>
-                    </hr>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='line2' placeholder='Line 2 (Optional)' value='$line2' optional>
                 </div>
-              </div>
-            </form>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='city' placeholder='City' value='$city' required>
+                </div>
+                <div class='form-group'>
+                  <select class='form-control' name='state' required>
+                    <option value=''>State</option>
+                    <option>Alabama </option>
+                    <option>Alaska </option>
+                    <option>Arizona </option>
+                    <option>Arkansas </option>
+                    <option>California </option>
+                    <option>Colorado </option>
+                    <option>Connecticut </option>
+                    <option>Delaware </option>
+                    <option>Florida </option>
+                    <option>Georgia </option>
+                    <option>Hawaii </option>
+                    <option>Idaho </option>
+                    <option>Illinois </option>
+                    <option>Indiana </option>
+                    <option>Iowa </option>
+                    <option>Kansas </option>
+                    <option>Kentucky </option>
+                    <option>Louisiana </option>
+                    <option>Maine </option>
+                    <option>Maryland </option>
+                    <option>Massachusetts </option>
+                    <option>Michigan </option>
+                    <option>Minnesota </option>
+                    <option>Mississippi </option>
+                    <option>Missouri </option>
+                    <option>Montana Nebraska </option>
+                    <option>Nevada </option>
+                    <option>New Hampshire </option>
+                    <option>New Jersey </option>
+                    <option>New Mexico </option>
+                    <option>New York </option>
+                    <option>North Carolina </option>
+                    <option>North Dakota </option>
+                    <option>Ohio </option>
+                    <option>Oklahoma </option>
+                    <option>Oregon </option>
+                    <option>Pennsylvania </option>
+                    <option>Rhode Island </option>
+                    <option>South Carolina </option>
+                    <option>South Dakota </option>
+                    <option>Tennessee </option>
+                    <option>Texas </option>
+                    <option>Utah </option>
+                    <option>Vermont </option>
+                    <option>Virginia </option>
+                    <option>Washington </option>
+                    <option>West Virginia </option>
+                    <option>Wisconsin </option>
+                    <option>Wyoming</option>
+                  </select>
+                </div>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='zip' placeholder='Zip code' value='$zip' required>
+                </div>
+                <div class='form-check'>
+                  <input type='checkbox' class='form-check-input' name='sameShipping'>
+                  <label class='form-check-label' for='exampleCheck1'>Shipping address is same as billing</label>
+                </div>
+                <br><br>
+                <h3>Payment information</h3>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='cardName' placeholder='Name on card' required>
+                </div>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='cardNumber' placeholder='Card number' required>
+                </div>
+                <div class='form-group'>
+                  Expiration date <br>
+                  <input type='date' class='form-control' name='cardExpiration' required>
+                </div>
+                <div class='form-group'>
+                  <input type='text' class='form-control' name='cardCVV' placeholder='CVV' required>
+                </div>
+                <br>
+                <button type='submit' class='btn btn-success '>Complete purchase!</button>
+              </form>
             </div>
           ";
         }
       }
     ?>
     
-    <?php
-      include('footer.php');
-      include('footer-scripts.php');
-    ?>
+    <?php require('footer.php'); ?>
   </body>
 </html>
